@@ -10,7 +10,7 @@ test.describe('booking proccesses', () => {
     await homePage.goToPage();
    });
 
-    test('booking with valid data', async ({page}) => {
+    test('booking valid dates', async ({page}) => {
         const homePage = new HomePage(page)
         const roomPage = new RoomPage(page)
         const bookingPage = new BookingPage(page)
@@ -29,6 +29,72 @@ test.describe('booking proccesses', () => {
             phone: '01234567890'
         })
         await bookingPage.submitBooking()
-        await bookingPage.isBookingConfirmed()
+        await page.waitForLoadState('networkidle');
+
+        await expect(bookingPage.isConfirmed).toBeVisible()
     })
+
+    test('booking invalid dates', async ({page}) => {
+        const homePage = new HomePage(page)
+        const roomPage = new RoomPage(page)
+        const bookingPage = new BookingPage(page)
+        const calendar = new CalendarComponent(page)
+
+        await homePage.goToRooms()
+        await roomPage.bookNow()
+
+        await calendar.selectDateRange(1, 5)
+        await bookingPage.openBookingForm()   
+        
+        await bookingPage.fillBookingForm({
+            firstName: 'Tester',
+            lastName: 'Black',
+            email: 'test123@test.com', 
+            phone: '01234567890'
+        })
+        await bookingPage.submitBooking()
+        await page.waitForLoadState('networkidle');
+
+        await expect(bookingPage.isConfirmed).toBeHidden()
+        await expect(bookingPage.firstNameInput).toBeVisible()
+    })
+
+    test('check if already booked dates show as unavailable', async ({page}) => {
+        const homePage = new HomePage(page)
+        const roomPage = new RoomPage(page)
+        const bookingPage = new BookingPage(page)
+        const calendar = new CalendarComponent(page)
+
+        await homePage.goToRooms()
+        await roomPage.bookNow()
+        await bookingPage.goToNextMonth()
+
+        await expect(page.getByTitle('Unavailable')).toBeVisible()
+    })
+
+     test('check if you can book dates that already booked', async ({page}) => {
+        const homePage = new HomePage(page)
+        const roomPage = new RoomPage(page)
+        const bookingPage = new BookingPage(page)
+        const calendar = new CalendarComponent(page)
+
+        await homePage.goToRooms()
+        await roomPage.bookNow()
+        await bookingPage.goToNextMonth()
+
+        await calendar.selectDateRange(0, 4)
+        await bookingPage.openBookingForm()   
+        
+        await bookingPage.fillBookingForm({
+            firstName: 'Tester',
+            lastName: 'Black',
+            email: 'test123@test.com', 
+            phone: '01234567890'
+        })
+        await bookingPage.submitBooking()
+        await page.waitForLoadState('networkidle');
+        
+        await expect(bookingPage.isConfirmed).toBeHidden()
+        await expect(bookingPage.firstNameInput).toBeVisible()
+     })
 })

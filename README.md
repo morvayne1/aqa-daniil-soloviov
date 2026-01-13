@@ -1,65 +1,58 @@
-## aqa-daniil-soloviov
+# Playwright POM Booking Automation Framework
 
-Automated testing project for https://automationintesting.online/ using Playwright (TypeScript).
+Advanced end-to-end and API test automation framework for the Restful-Booker platform[](https://automationintesting.online) using **Playwright** and **TypeScript**.
 
-This repository contains:
-- Manual test cases (test-cases.txt)
-- Automated UI tests
-- Automated API tests
-
-The task was completed using Playwright instead of Cypress as allowed by the assignment.
+This project demonstrates professional test automation practices:
+- Page Object Model (POM) for UI tests
+- Reusable API helpers
+- Structured, maintainable, and scalable architecture
+- Positive and negative scenarios with real bug discovery
 
 ## Project Structure
-aqa-inforce-daniil-soloviov/
+aqa-pom-automation/
+├── page-object/                # Page Object Model classes
+│   ├── home-page.ts
+│   ├── room-page.ts
+│   ├── booking-page.ts
+│   └── Components/calendar.ts
+├── helpers/                    # API helpers
+│   ├── auth-token.ts
+│   ├── create-booking.ts
+│   └── create-room.ts
 ├── tests/
-│   ├── API 
-|   |    └── api.spec.ts     - API tests: create/edit/delete room, create booking
-│   └── UI 
-│        └── ui.spec.ts      - UI tests: valid/invalid booking, unavailable dates checks (+1)
-├── .gitignore
-├── package-lock.json
-├── package.json
+│   ├── API/
+│   │     └── book-room.spec.ts               # API tests
+│   │     └── create-room.spec.ts
+│   │     └── delete-room.spec.ts
+│   │     └── edit-room.spec.ts                    
+│   └── UI/
+│       └── booking.spec.ts     # UI tests with POM
+│
 ├── playwright.config.ts
+├── test-cases.txt              # Manual test cases
 └── README.md
-└── test-cases.txt      - Manual test cases as required
 
-## Implemented Tests
-- Manual Test Cases (test-cases.txt)
-
-1. Booking a room with valid data
-2. Attempting to book a room with invalid data
-3. Verifying that already booked dates are shown as unavailable
-
-- Automated UI Tests (tests/UI/booking.spec.ts)
-
-1. Successful booking with valid future dates → verifies "Booking Confirmed" modal appears
-2. Attempt to book on past dates → expects no confirmation and form remains visible (test fails due to actual bug — booking is allowed)
-3. Check that booked dates show unavailable title
-4. Attempt to book on already booked dates → expects graceful error handling (test fails due to application crash — critical bug found)
-
-- Automated API Tests (tests/API/rooms.spec.ts)
-
-1. Create a room from admin API and verify it appears in public room list
-2. Create a booking from API and verify it exists
-3. Edit a room from admin API and verify changes are appear
-4. Delete a room from admin API and verify it is removed
-
-## Found Defects (Beyond the Scope of the Task)
-
-- Critical: Booked dates still selectable to book
-
-Steps to reproduce:
-1. Open room booking calendar
-2. Navigate to a month with existing bookings
-3. Try to select dates marked as unavailable
-
-Actual result: Dates are visually styled as booked but remain fully clickable and can be selected.
-Expected result: Booked dates should be non-interactive (disabled) or show a warning.
-
+## Key Features
+- Full Page Object Model implementation for UI
+- Reusable API helpers for authentication and data creation
+- Comprehensive coverage: valid/invalid booking, overlapping dates, visibility of booked dates
+- Real bugs discovered and documented (frontend crash on 409, selectable booked dates)
 
 ## Running Tests
-npx playwright test                  - Run all tests
-npx playwright test tests/ui.spec.ts - Run only UI tests
-npx playwright test tests/api.spec.ts - Run only API tests
-npx playwright test --headed         - Run in headed mode
-npx playwright show-report           - View report after run
+npm install
+npx playwright install
+
+npx playwright test                    # All tests
+npx playwright test tests/UI           # UI tests only
+npx playwright test tests/API          # API tests only
+npx playwright test --headed           # Headed mode
+npx playwright show-report             # HTML report
+
+## Found Defects
+
+Critical: Frontend crashes on overlapping dates (409 Conflict not handled)
+High: Booked dates remain selectable despite visual indication
+High: Past dates can be booked successfully
+
+## Test Cases
+Detailed manual test cases in test-cases.txt with expected and actual results.

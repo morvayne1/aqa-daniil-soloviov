@@ -7,7 +7,8 @@ export class BookingPage {
     readonly lastNameInput: Locator
     readonly emailInput: Locator
     readonly phoneInput: Locator
-    readonly bookingConfirmHeader: Locator
+    readonly nextMonth: Locator
+    readonly isConfirmed: Locator
 
     constructor(page: Page) {
     this.page = page
@@ -16,7 +17,8 @@ export class BookingPage {
     this.lastNameInput = page.getByPlaceholder('Lastname')
     this.emailInput = page.getByPlaceholder('Email')
     this.phoneInput = page.getByPlaceholder('Phone')
-    this.bookingConfirmHeader = page.locator('h2', { hasText: 'Booking Confirmed' })
+    this.nextMonth = page.getByRole('button', {name: "Next"})
+    this.isConfirmed = page.locator('h2', { hasText: 'Booking Confirmed' })
   }
 
   async openBookingForm() {
@@ -34,8 +36,7 @@ export class BookingPage {
     await this.reserveButton.click()
   }
 
-  async isBookingConfirmed() {
-    return this.bookingConfirmHeader.isVisible()
+  async goToNextMonth() {
+    await this.nextMonth.click()
   }
-
 }

@@ -1,62 +1,35 @@
-1. Book a room with valid data
+Test Cases for Restful-Booker Platform (automationintesting.online)
+Preconditions for all tests: Application is opened on the home page
 
-Preconditions:
-- User application is opened
-
+Successful booking with valid data
 Steps:
-1. Choose a room to book
-2. Click "Book now" button
-3. Choose valid check-in and check-out dates
-4. Click the "Reserve Now" button
-4. Enter valid user data (First name, Last name, Email, Phone)
-5. Click the "Reserve Now" button
+1. Navigate to Rooms
+2. Select "Single" room and click "Book Now"
+3. Select valid future dates (e.g., 20–25 of current month)
+4. Click "Reserve Now"
+5. Fill guest details (Firstname, Lastname, Email, Phone)
+6. Submit booking
+Expected Result: "Booking Confirmed" message appears
 
-Expected Result:
-- Confirmation message is displayed
-
-2. Try to book a room with invalid data
-
-Preconditions:
-- User application is opened
-
+Attempt to book on invalid (past/overlapping) dates
 Steps:
-2. Choose a room to book
-2. Click "Book now" button
-3. Choose invalid check-in and check-out dates
-4. Click the "Reserve Now" button
+1. Navigate to Rooms
+2. Select "Single" room and click "Book Now"
+3. Select past or overlapping dates
+4. Fill guest details and submit
+5. Expected Result: No confirmation message, form remains open
+Actual Result: Frontend may crash ("Application error") or booking succeeds — BUG
 
-Expected Result:
-- Validation error message is displayed
-- User stays on the booking form
-
-3. Check that already booked fates show "unavailable" title
-
-Preconditions:
-- User application is opened
-- Room has an existing booking for specific dates
-
+Check visibility of booked dates
 Steps:
-2. Choose a room to book
-2. Click "Book now" button
-3. Find already booked dates
+1. Open booking calendar for any room
+2. Navigate to month with existing bookings
+3. Expected Result: Booked dates have "Unavailable" title
+Actual Result: Title visible — PASS
 
-Expected Result:
-- Booked days show "unavailable" title
-
-4. Check that already booked dates are unavailable
-
-Preconditions:
-- User application is opened
-- Room has an existing booking for specific dates
-
+Check if booked dates are selectable
 Steps:
-2. Select the room that already has a booking
-3. Click "Book now" button
-4. Try to select dates that are already booked
-
-Expected Result:
-- Already booked dates are shown as unavailable
-- User cannot select unavailable dates
-
-Actual Result: 
-Dates are shown as unavailable but remain selectable → Bug
+1. Open booking calendar for any room
+2. Try to select dates marked as unavailable
+Expected Result: Dates should be non-interactive
+Actual Result: Dates are selectable — BUG
