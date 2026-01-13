@@ -1,4 +1,4 @@
-## aqa-inforce-daniil-soloviov
+## aqa-daniil-soloviov
 
 Automated testing project for https://automationintesting.online/ using Playwright (TypeScript).
 
