@@ -56,3 +56,23 @@ High: Past dates can be booked successfully
 
 ## Test Cases
 Detailed manual test cases in test-cases.txt with expected and actual results.
+
+## Artifacts (on failure)
+
+The project captures debugging artifacts automatically:
+- HTML report: `playwright-report/`
+- Trace / video / screenshots: `test-results/`
+
+In CI, these artifacts are uploaded for each run.
+Locally, you can open the report with:
+
+npx playwright show-report
+
+## Quarantine tests
+
+Some UI tests are tagged as `@quarantine` due to instability of the public demo environment.
+Stable suite:
+npx playwright test --grep-invert "@quarantine"
+
+Full suite:
+npx playwright test
